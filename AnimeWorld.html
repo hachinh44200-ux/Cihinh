@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnimeWorld - Thiên đường anime của bạn</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* ===================== RESET & GLOBAL ===================== */
+    * {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+    body {
+      background-color: #0a0a1a; color: #fff; line-height: 1.6;
+      background-image: radial-gradient(circle at 20% 30%, rgba(34,34,74,0.4) 0%, transparent 60%),
+                        radial-gradient(circle at 80% 70%, rgba(87,34,104,0.4) 0%, transparent 60%);
+    }
+    a {text-decoration: none; color: #fff;}
+    .container {max-width: 1200px; margin: 0 auto; padding: 0 15px;}
+
+    /* ===================== HEADER ===================== */
+    /* ====== HEADER ====== */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(10, 10, 26, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 15px rgba(132, 28, 184, 0.3);
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 75px;
+}
+
+/* Logo */
+.logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ff3e7f;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo span {
+  color: #6c5ce7;
+}
+
+/* Menu */
+.nav-menu ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 20px;
+}
+.nav-menu a {
+  color: #fff;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+.nav-menu a:hover,
+.nav-menu a.active {
+  color: #ff3e7f;
+}
+
+/* Thanh tìm kiếm + user */
+.right-side {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Ô tìm kiếm */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 25px;
+  padding: 5px 12px;
+}
+.search-box input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  outline: none;
+  width: 160px;
+  font-size: 14px;
+}
+.search-box button {
+  background: transparent;
+  border: none;
+  color: #6c5ce7;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Nút đăng nhập / đăng ký */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.user-actions a {
+  padding: 8px 15px;
+  border-radius: 25px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+.login-btn {
+  background: rgba(108, 92, 231, 0.2);
+  color: #6c5ce7;
+}
+.signup-btn {
+  background: linear-gradient(90deg, #6c5ce7, #ff3e7f);
+  color: #fff;
+}
+.user-actions a:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+}
+    /* ===================== BANNER ===================== */
+    .banner {
+      margin-top: 90px;
+      height: 500px;
+      background: linear-gradient(to right, rgba(10,10,26,0.9), rgba(10,10,26,0.5)), url('img/Demon\ Slayer\ Tengen.jpg') center/cover;
+      display: flex; align-items: center; border-radius: 15px; position: relative;
+    }
+
+    .banner-content {padding: 40px; max-width: 600px;}
+    .banner-content h1 {font-size: 42px; color: #fff;}
+    .banner-content p {margin: 15px 0; opacity: 0.9;}
+
+    .btn {
+      padding: 12px 25px; border-radius: 25px; font-weight: 500;
+      cursor: pointer; border: none; transition: 0.3s; margin-right: 10px;
+    }
+    .btn-play {background: linear-gradient(90deg, #6c5ce7, #ff3e7f); color: #fff;}
+
+    /* ===================== MOVIE GRID ===================== */
+    .section-title {font-size: 24px; margin: 40px 0 20px; border-bottom: 2px solid #6c5ce7; display: inline-block;}
+    .movies-container {display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px;}
+
+    .movie-card {
+      background: #1a1a2e; border-radius: 12px; overflow: hidden;
+      transition: 0.3s; cursor: pointer; position: relative;
+    }
+
+    .movie-card:hover {transform: translateY(-10px); box-shadow: 0 10px 25px rgba(108,92,231,0.3);}
+    .movie-poster {width: 100%; height: 300px; object-fit: cover;}
+    .movie-info {padding: 15px;}
+    .movie-title {font-weight: 600;}
+    .episode-badge, .rating {
+      position: absolute; top: 10px; padding: 4px 10px; border-radius: 15px;
+      font-size: 12px; font-weight: 600;
+    }
+    .episode-badge {right: 10px; background: linear-gradient(90deg, #6c5ce7, #ff3e7f);}
+    .rating {left: 10px; background: rgba(0,0,0,0.7); color: #ffc107;}
+
+    /* ===================== MODAL VIDEO ===================== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      justify-content: center; align-items: center;
+    }
+    .modal.show {display: flex; animation: fadeIn 0.4s ease forwards;}
+    @keyframes fadeIn {from {opacity: 0;} to {opacity: 1;}}
+    .modal-content {
+      background: #1a1a2e; border-radius: 10px; padding: 15px;
+      width: 90%; max-width: 800px; position: relative;
+      box-shadow: 0 5px 15px rgba(108,92,231,0.5);
+      animation: zoomIn 0.3s ease;
+    }
+    @keyframes zoomIn {from {transform: scale(0.9);} to {transform: scale(1);}}
+    .close-button {
+      position: absolute; top: 10px; right: 20px; font-size: 28px;
+      color: #ff3e7f; cursor: pointer; transition: 0.3s;
+    }
+    .close-button:hover {color: #fff;}
+    video {width: 100%; border-radius: 10px;}
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      background: #070711;
+      padding: 60px 0 20px;
+      margin-top: 40px;
+      position: relative;
+    }
+    footer::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, #6c5ce7, #ff3e7f);
+    }
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+    }
+    .footer-column h3 {
+      font-size: 18px; margin-bottom: 20px; color: #6c5ce7; position: relative;
+    }
+    .footer-column h3::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 40px; height: 3px;
+      background: linear-gradient(90deg, #6c5ce7, #ff3e7f);
+    }
+    .footer-column ul {list-style: none;}
+    .footer-column ul li {margin-bottom: 12px;}
+    .footer-column ul li a {color: #ccc; transition: color 0.3s;}
+    .footer-column ul li a:hover {color: #ff3e7f;}
+    .social-icons {display: flex; gap: 15px; margin-top: 15px;}
+    .social-icons a {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      background: #1a1a2e; border-radius: 50%; transition: 0.3s;
+    }
+    .social-icons a:hover {background: linear-gradient(90deg, #6c5ce7, #ff3e7f); transform: translateY(-3px);}
+    .copyright {text-align: center; margin-top: 40px; border-top: 1px solid #1a1a2e; padding-top: 20px; color: #aaa;}/* Hiệu ứng loading */
+.page-loader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(10,10,26,0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.page-loader.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(255,255,255,0.1);
+  border-top: 6px solid #ff3e7f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.page-loader p {
+  color: #ccc;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+  </style>
+</head>
+<body>
+  <header>
+  <div class="container header-content">
+    <div class="logo">
+      <i class="fas fa-dragon"></i> Anime<span>World</span>
+    </div>
+
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="#" class="nav-link active" data-section="home"><i class="fas fa-home"></i> Trang Chủ</a></li>
+        <li><a href="#" class="nav-link" data-section="popular"><i class="fas fa-fire"></i> Phổ Biến</a></li>
+        <li><a href="#" class="nav-link" data-section="new"><i class="fas fa-star"></i> Mới Nhất</a></li>
+        <li><a href="#" class="nav-link" data-section="theloai"><i class="fas fa-list"></i> Thể Loại</a></li>
+        <li><a href="#" class="nav-link" data-section="phimle"><i class="fas fa-film"></i> Phim Lẻ</a></li>
+        <li><a href="#" class="nav-link" data-section="phimbo"><i class="fas fa-tv"></i> Phim Bộ</a></li>
+      </ul>
+    </nav>
+    <div class="right-side">
+      <div class="search-box">
+        <input type="text" placeholder="Tìm kiếm anime...">
+        <button><i class="fas fa-search"></i></button>
+      </div>
+      <div class="user-actions">
+        <a href="#" class="login-btn"><i class="fas fa-sign-in-alt"></i> Đăng Nhập</a>
+        <a href="#" class="signup-btn"><i class="fas fa-user-plus"></i> Đăng Ký</a>
+      </div>
+    </div>
+  </div>
+</header>
+  <main class="container">
+    <section class="banner">
+      <div class="banner-content">
+        <img src="img/demonslayer.jpg" alt="Demon Slayer Poster">
+        <h1>Demon Slayer: Kimetsu no Yaiba</h1>
+        <p>Tanjiro Kamado trở thành thợ săn quỷ sau khi gia đình bị sát hại. Cậu quyết tâm cứu em gái Nezuko khỏi lời nguyền quỷ.</p>
+        <button class="btn btn-play"><i class="fas fa-play"></i> Xem Trailer</button>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Anime Phổ Biến</h2>
+      <div class="movies-container">
+        <div class="movie-card" data-video="ainme.mp4">
+          <div class="episode-badge">Movie</div>
+          <div class="rating"><i class="fas fa-star"></i> 9.4</div>
+          <img src="img/thanh.jpg" class="movie-poster" alt="Demon Slayer: Rengoku">
+          <div class="movie-info"><h3 class="movie-title">Demon Slayer: Rengoku</h3></div>
+        </div>
+
+        <div class="movie-card" data-video="jujustukaisen.mp4.mp4">
+          <div class="episode-badge">Tập 24</div>
+          <div class="rating"><i class="fas fa-star"></i> 8.9</div>
+          <img src="img/jujutsu.jpg" class="movie-poster" alt="Jujutsu Kaisen">
+          <div class="movie-info"><h3 class="movie-title">Jujutsu Kaisen</h3></div>
+        </div>
+
+        <div class="movie-card" data-video="ainme.mp4">
+          <div class="episode-badge">Phần cuối</div>
+          <div class="rating"><i class="fas fa-star"></i> 9.2</div>
+          <img src="img/Attack-On-Titan-elle-man-1.jpg" class="movie-poster" alt="Attack on Titan">
+          <div class="movie-info"><h3 class="movie-title">Attack on Titan</h3></div>
+        </div>
+      <div class="movie-card" data-video="ainme.mp4">
+          <div class="episode-badge">Tập 15</div>
+          <div class="rating"><i class="fas fa-star"></i> 9.2</div>
+          <img src="img/Spy x Family.jpg" class="movie-poster" alt="Spy x Family">
+          <div class="movie-info"><h3 class="movie-title">Spy x Family</h3></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>Giới Thiệu</h3>
+          <p>AnimeWorld là trang web xem anime trực tuyến chất lượng cao, cập nhật nhanh chóng và hoàn toàn miễn phí.</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>Thể Loại</h3>
+          <ul>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Hành Động</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Phiêu Lưu</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Học Đường</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Hài Hước</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Fantasy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Liên Kết Nhanh</h3>
+          <ul>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Trang Chủ</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Phổ Biến</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Mới Nhất</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Danh Sách</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Theo Dõi</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Hỗ Trợ</h3>
+          <ul>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Câu Hỏi Thường Gặp</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Hướng Dẫn Sử Dụng</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Báo Lỗi</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Liên Hệ</a></li>
+            <li><a href="#"><i class="fas fa-arrow-right"></i> Điều Khoản Sử Dụng</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 AnimeWorld. Tất cả các quyền được bảo lưu.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL VIDEO -->
+  <div id="videoModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <video id="animeVideoPlayer" controls></video>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const loader = document.getElementById("pageLoader");
+  const navLinks = document.querySelectorAll(".nav-link");
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+
+      // Xóa class active khỏi tất cả các mục
+      navLinks.forEach(l => l.classList.remove("active"));
+      // Thêm class active cho mục được click
+      link.classList.add("active");
+
+      // Hiển thị hiệu ứng loading
+      loader.classList.add("show");
+
+      // Giả lập đang tải dữ liệu (1.2 giây)
+      setTimeout(() => {
+        loader.classList.remove("show");
+
+        // Bạn có thể thay console.log bằng việc đổi nội dung trang
+        const section = link.dataset.section;
+        console.log("Chuyển sang:", section);
+
+        // Nếu sau này bạn muốn điều hướng thật:
+        // window.location.href = `${section}.html`;
+      }, 1200);
+    });
+  });
+});
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const videoModal = document.getElementById("videoModal");
+      const videoPlayer = document.getElementById("animeVideoPlayer");
+      const closeButton = document.querySelector(".close-button");
+
+      // Xem trailer banner
+      document.querySelector(".btn-play").addEventListener("click", () => {
+        videoPlayer.src = "ainme.mp4";
+        videoPlayer.src = "jujustukaisen.mp4";
+        videoPlayer.play();
+        videoModal.classList.add("show");
+      });
+
+      // Mở video khi click poster
+      document.querySelectorAll(".movie-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const src = card.getAttribute("data-video");
+          if (src) {
+            videoPlayer.src = src;
+            videoModal.classList.add("show");
+            videoPlayer.play();
+          }
+        });
+      });
+
+      // Đóng modal
+      const closeModal = () => {
+        videoModal.classList.remove("show");
+        videoPlayer.pause();
+        videoPlayer.src = "";
+      };
+      closeButton.addEventListener("click", closeModal);
+      videoModal.addEventListener("click", e => { if (e.target === videoModal) closeModal(); });
+    });
+  </script><!-- Hiệu ứng tải trang -->
+<div id="pageLoader" class="page-loader">
+  <div class="spinner"></div>
+  <p>Đang tải nội dung...</p>
+</div>
+</body>
+</html>
